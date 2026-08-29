@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('patterns', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('type');
+            $table->string('for');
             $table->timestamps();
         });
     }
