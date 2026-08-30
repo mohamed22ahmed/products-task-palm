@@ -11,6 +11,7 @@
 ## Frontend
  - React
  - CSS
+ - you don't need to refresh the page to see the changes, cause i call the API to get the products every 30 seconds
 
 ## Setup Project
  - into product-backend directory

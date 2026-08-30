@@ -1,12 +1,12 @@
 .product-card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 20px;
-  margin: 10px;
+  padding: 15px;
   background: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.2s, box-shadow 0.2s;
-  max-width: 300px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .product-image-container {
@@ -37,21 +37,28 @@
 .product-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 12px;
+  gap: 10px;
 }
 
 .product-name,
 .product-title {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #333;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  flex: 1;
 }
 
 .product-price {
   font-weight: bold;
   color: #2ecc71;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .details-button {
@@ -92,6 +99,7 @@
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
+  box-sizing: border-box;
 }
 
 .close-button {
@@ -142,4 +150,83 @@
 .detail-item strong {
   color: #555;
   margin-right: 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .product-card {
+    padding: 12px;
+  }
+
+  .product-image-container {
+    height: 180px;
+  }
+
+  .product-name,
+  .product-title {
+    font-size: 1rem;
+  }
+
+  .product-price {
+    font-size: 0.95rem;
+  }
+
+  .details-button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .modal-content {
+    padding: 20px;
+    width: 95%;
+  }
+
+  .detail-image-container {
+    height: 250px;
+  }
+
+  .close-button {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card {
+    padding: 10px;
+  }
+
+  .product-image-container {
+    height: 160px;
+  }
+
+  .product-name,
+  .product-title {
+    font-size: 0.95rem;
+  }
+
+  .product-price {
+    font-size: 0.9rem;
+  }
+
+  .details-button {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .modal-content {
+    padding: 15px;
+    max-height: 85vh;
+  }
+
+  .detail-image-container {
+    height: 200px;
+  }
+
+  .modal-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .detail-item {
+    font-size: 0.9rem;
+  }
 }

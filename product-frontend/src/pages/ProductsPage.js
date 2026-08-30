@@ -12,12 +12,22 @@ const ProductsPage = () => {
 
   // Fetch all products
   useEffect(() => {
-    fetchProducts();
+    fetchProducts(true);
+    
+    // Refresh data every 30 seconds without showing loading state
+    const intervalId = setInterval(() => {
+      fetchProducts(false);
+    }, 30000);
+    
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      }
       const response = await fetch(`${API_BASE_URL}/products`);
       
       if (!response.ok) {
@@ -31,7 +41,9 @@ const ProductsPage = () => {
       setError('Failed to fetch products. Please try again later.');
       console.error('Error fetching products:', err);
     } finally {
-      setLoading(false);
+      if (showLoading) {
+        setLoading(false);
+      }
     }
   };
 
@@ -73,7 +85,7 @@ const ProductsPage = () => {
       <div className="products-page">
         <div className="error">
           <p>{error}</p>
-          <button onClick={fetchProducts} className="retry-button">Retry</button>
+          <button onClick={() => fetchProducts(true)} className="retry-button">Retry</button>
         </div>
       </div>
     );
