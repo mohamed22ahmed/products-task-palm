@@ -140,17 +140,72 @@ class PatternsSeeder extends Seeder
                 'domain'  => 'general'
             ],
             [
-                'name' => '/<span[^>]*class="[^"]*breadcrumb[^"]*"[^>]*>.*?<span[^>]*class="[^"]*last[^"]*"[^>]*>([^<]+)<\/span>/s',
-                'type' => 'title',
-                'domain'  => 'breadcrumb'
-            ],
-            [
                 'name' => '/<span[^>]*itemprop="name"[^>]*>([^<]+)<\/span>/i',
                 'type' => 'title',
                 'domain'  => 'general'
             ],
             [
                 'name' => '/<div[^>]*itemprop="name"[^>]*>([^<]+)<\/div>/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<h1[^>]*itemprop="name"[^>]*>([^<]+)<\/h1>/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<h2[^>]*itemprop="name"[^>]*>([^<]+)<\/h2>/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<h3[^>]*itemprop="name"[^>]*>([^<]+)<\/h3>/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<p[^>]*itemprop="name"[^>]*>([^<]+)<\/p>/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<span[^>]*data-product-name="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<div[^>]*data-product-name="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<span[^>]*data-name="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<div[^>]*data-name="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<input[^>]*name="product_name"[^>]*value="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/<input[^>]*name="name"[^>]*value="([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/"productName"\s*:\s*"([^"]+)"/i',
+                'type' => 'title',
+                'domain'  => 'general'
+            ],
+            [
+                'name' => '/"product_name"\s*:\s*"([^"]+)"/i',
                 'type' => 'title',
                 'domain'  => 'general'
             ],
@@ -228,37 +283,22 @@ class PatternsSeeder extends Seeder
                 'domain'  => 'general'
             ],
             [
-                'name' => '/([0-9,]+\.?[0-9]*)\s*EGP/i',
+                'name' => '/<span[^>]*>EGP\s*([0-9,]+\.?[0-9]*)<\/span>/i',
                 'type' => 'price',
                 'domain'  => 'jumia'
             ],
             [
-                'name' => '/<span[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)\s*EGP/i',
+                'name' => '/<div[^>]*>EGP\s*([0-9,]+\.?[0-9]*)<\/div>/i',
                 'type' => 'price',
                 'domain'  => 'jumia'
             ],
             [
-                'name' => '/<span[^>]*class="[^"]*price[^"]*"[^>]*>.*?([0-9,]+\.?[0-9]*)\s*EGP/i',
+                'name' => '/<span[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/span>/i',
                 'type' => 'price',
                 'domain'  => 'jumia'
             ],
             [
-                'name' => '/<div[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)\s*EGP/i',
-                'type' => 'price',
-                'domain'  => 'jumia'
-            ],
-            [
-                'name' => '/<div[^>]*class="[^"]*price[^"]*"[^>]*>.*?([0-9,]+\.?[0-9]*)\s*EGP/i',
-                'type' => 'price',
-                'domain'  => 'jumia'
-            ],
-            [
-                'name' => '/<span[^>]*class="[^"]*product-price[^"]*"[^>]*>([^<]+)\s*EGP/i',
-                'type' => 'price',
-                'domain'  => 'jumia'
-            ],
-            [
-                'name' => '/<span[^>]*class="[^"]*product-price[^"]*"[^>]*>.*?([0-9,]+\.?[0-9]*)\s*EGP/i',
+                'name' => '/<div[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/div>/i',
                 'type' => 'price',
                 'domain'  => 'jumia'
             ],
@@ -288,7 +328,7 @@ class PatternsSeeder extends Seeder
                 'domain'  => 'alibaba'
             ],
             [
-                'name' => '/<span[^>]*class="[^"]*a-price[^"]*"[^>]*>.*?<span[^>]*class="[^"]*a-offscreen[^"]*"[^>]*>\$([0-9,]+\.?[0-9]*)<\/span>/i',
+                'name' => '/<span[^>]*class="[^"]*a-price[^"]*"[^>]*>.*?<span[^>]*class="[^"]*a-offscreen[^"]*"[^>]*>(?:EGP)?\s*([0-9,]+\.?[0-9]*)<\/span>/i',
                 'type' => 'price',
                 'domain'  => 'amazon'
             ],
@@ -303,12 +343,12 @@ class PatternsSeeder extends Seeder
                 'domain'  => 'amazon'
             ],
             [
-                'name' => '/<span[^>]*aria-label="[^"]*\$([0-9,]+\.?[0-9]*)[^"]*"[^>]*class="[^"]*a-price[^"]*"/i',
+                'name' => '/<span[^>]*aria-label="[^"]*[\$£€]([0-9,]+\.?[0-9]*)[^"]*"[^>]*class="[^"]*a-price[^"]*"/i',
                 'type' => 'price',
                 'domain'  => 'amazon'
             ],
             [
-                'name' => '/<span[^>]*id="priceblock_ourprice"[^>]*>\$([0-9,]+\.?[0-9]*)<\/span>/i',
+                'name' => '/<span[^>]*id="priceblock_ourprice"[^>]*>[\$£€]?([0-9,]+\.?[0-9]*)<\/span>/i',
                 'type' => 'price',
                 'domain'  => 'amazon'
             ],

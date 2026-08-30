@@ -119,15 +119,43 @@ class ProductService
             ->orderByRaw("CASE WHEN domain = '".$domain."' THEN 0 ELSE 1 END")
             ->get();
 
+        $validMatches = [];
+
         foreach ($patterns as $pattern) {
             if (preg_match($pattern->name, $html, $matches)) {
-                if($type === 'price' && $matches[1] == 0)
-                    continue;
-                return $matches[1];
+                if($type === 'price') {
+                    $price = self::cleanPrice($matches[1]);
+                    if ($price < 0.01 || $price > 1000000) {
+                        continue;
+                    }
+
+                    $hasCurrency = preg_match('/[\$£€¥₹₽₩]/', $pattern->name);
+                    $validMatches[] = [
+                        'match' => $matches[1],
+                        'has_currency' => $hasCurrency,
+                        'is_domain_specific' => $pattern->domain === $domain
+                    ];
+                } else {
+                    return $matches[1];
+                }
             }
         }
 
-        return null;
+        if (empty($validMatches)) {
+            return null;
+        }
+
+        usort($validMatches, function($a, $b) {
+            if ($a['is_domain_specific'] !== $b['is_domain_specific']) {
+                return $b['is_domain_specific'] <=> $a['is_domain_specific'];
+            }
+            if ($a['has_currency'] !== $b['has_currency']) {
+                return $b['has_currency'] <=> $a['has_currency'];
+            }
+            return 0;
+        });
+
+        return $validMatches[0]['match'];
     }
 
     private static function cleanText(string $text): string
