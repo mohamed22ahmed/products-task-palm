@@ -121,7 +121,7 @@ class ProductService
 
         foreach ($patterns as $pattern) {
             if (preg_match($pattern->name, $html, $matches)) {
-                if($type === 'price' && $matches[1] == 0.0)
+                if($type === 'price' && $matches[1] == 0)
                     continue;
                 return $matches[1];
             }
@@ -138,6 +138,6 @@ class ProductService
     private static function cleanPrice(string $price): float
     {
         $price = preg_replace('/[^0-9.]/', '', $price);
-        return (float) $price;
+        return (float) number_format((float) $price, 2, '.', '');
     }
 }
