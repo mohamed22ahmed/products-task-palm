@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Pattern;
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 use GuzzleHttp\Client;
 
@@ -10,6 +11,11 @@ class ProductService
 {
     public static function getAllProducts(){
         return ProductRepository::getAll();
+    }
+
+    public static function getProductDetails($id): Product
+    {
+        return ProductRepository::show($id);
     }
 
     public static function scrapeAndSaveProduct(string $productUrl): ?\App\Models\Product
