@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Pattern;
 use App\Repositories\ProductRepository;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Log;
-use App\Services\ProxyManagementService;
 
 class ProductService
 {
@@ -17,26 +15,21 @@ class ProductService
     public static function scrapeAndSaveProduct(string $productUrl): ?\App\Models\Product
     {
         $productData = self::scrapeProduct($productUrl);
-
         if (!$productData) {
             return null;
         }
+
         return ProductRepository::create($productData);
     }
 
     public static function scrapeProduct(string $productUrl): ?array
     {
-        $maxRetries = 3;
-        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             $clientConfig = self::getClientConfig($productUrl);
             $client = new Client($clientConfig);
             $response = $client->get($productUrl);
             $html = $response->getBody()->getContents();
 
-            return self::parseProduct($html, $productUrl);
-        }
-
-        return null;
+            return self::parseProduct($html, $productUrl) ?? null;
     }
 
     private static function getClientConfig($productUrl): array
@@ -100,10 +93,51 @@ class ProductService
 
     private static function parseProduct(string $html, string $url): ?array
     {
+        $domain = strtolower(self::getDomain($url));
+        $title  = self::extractData($html, $domain, 'title');
+        $price  = self::extractData($html, $domain, 'price');
+        $image  = self::extractData($html, $domain, 'image');
+
         return [
-            'title'     => 'title',
-            'price'     => 0,
-            'image_url' => 'https://via.placeholder.com/300',
+            'title'     => self::cleanText($title),
+            'price'     => self::cleanPrice($price),
+            'image_url' => self::cleanText($image)
         ];
+    }
+
+    private static function getDomain($url): string
+    {
+        $parsedUrl = parse_url($url);
+        $domain = explode('.', $parsedUrl['host'])[1];
+
+        return ($domain === 'amazon' || $domain === 'alibaba' || $domain === 'jumia' || $domain === 'breadcrumb') ? $domain : 'general';
+    }
+
+    private static function extractData(string $html, string $domain, string $type): ?string
+    {
+        $patterns = Pattern::where('type', $type)
+            ->orderByRaw("CASE WHEN domain = '".$domain."' THEN 0 ELSE 1 END")
+            ->get();
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern->name, $html, $matches)) {
+                if($type === 'price' && $matches[1] == 0.0)
+                    continue;
+                return $matches[1];
+            }
+        }
+
+        return null;
+    }
+
+    private static function cleanText(string $text): string
+    {
+        return trim(strip_tags($text));
+    }
+
+    private static function cleanPrice(string $price): float
+    {
+        $price = preg_replace('/[^0-9.]/', '', $price);
+        return (float) $price;
     }
 }
